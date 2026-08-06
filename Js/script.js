@@ -137,34 +137,41 @@
 // mostrarSaldo()
 
 
-function inciarSesion(){
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve("Bienvenido, Abril")
-        }, 2000)
-    })
-}
+// function inciarSesion(){
+//     return new Promise((resolve) => {
+//         setTimeout(() => {
+//             resolve("Bienvenido, Abril")
+//         }, 2000)
+//     })
+// }
 
-async function mostrarInicio(){
-    const mensaje = await iniciarSesion()
-    console.log(mensaje)
-}
-mostrarInicio()
+// async function mostrarInicio(){
+//     const mensaje = await iniciarSesion()
+//     console.log(mensaje)
+// }
+// mostrarInicio()
 
-function obtenerUsuarios(){
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                id: 1,
-                nombre: "Abril",
-                edad: 20
-            })
-        }, 3000)
-    })
+// function obtenerUsuarios(){
+//     return new Promise((resolve) => {
+//         setTimeout(() => {
+//             resolve({
+//                 id: 1,
+//                 nombre: "Abril",
+//                 edad: 20
+//             })
+//         }, 3000)
+//     })
+// }
+// async function mostrarUsuarios(){
+//     console.log("Cargando usuarios...")
+//         const usuarios = await obtenerUsuarios()
+//         console.log(usuarios)
+// }
+// mostrarUsuarios() 
+
+//ejercicio de prueba
+async function prueba(){
+ const respuesta = await fetch("https://jsonplaceholder.typicode.com/users")
+console.log(respuesta)
 }
-async function mostrarUsuarios(){
-    console.log("Cargando usuarios...")
-        const usuarios = await obtenerUsuarios()
-        console.log(usuarios)
-}
-mostrarUsuarios()
+prueba()

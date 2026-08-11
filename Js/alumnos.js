@@ -78,34 +78,34 @@
 // }
 // mostrarDocentes()
 
-async  function obtenerAlumnos(){
-const respuesta = await fetch("https://jsonplaceholder.typicode.com/users")   
-const alumnos = await respuesta.json() 
-return alumnos
-}
-function mostrarAlumnos(alumnos){
-   //  console.table(alumnos)
-    console.log(typeof alumnos )
-    localStorage.setItem("alumnos", JSON.stringify(alumnos)) 
-    const datos = localStorage.getItem("alumnos")
-    console.log(typeof datos)
-    console.log(datos)
-    const alumnosRecuperados = JSON.parse(datos) 
-    console.log( typeof alumnosRecuperados) 
-    console.table(alumnosRecuperados)
+// async  function obtenerAlumnos(){
+// const respuesta = await fetch("https://jsonplaceholder.typicode.com/users")   
+// const alumnos = await respuesta.json() 
+// return alumnos
+// }
+// function mostrarAlumnos(alumnos){
+//    //  console.table(alumnos)
+//     console.log(typeof alumnos )
+//     localStorage.setItem("alumnos", JSON.stringify(alumnos)) 
+//     const datos = localStorage.getItem("alumnos")
+//     console.log(typeof datos)
+//     console.log(datos)
+//     const alumnosRecuperados = JSON.parse(datos) 
+//     console.log( typeof alumnosRecuperados) 
+//     console.table(alumnosRecuperados)
    
     
 
     // for (const alumno of alumnos) {
     //     console.log(alumno.id, alumno.name, alumno.email)
     // }
-}
+//}
 
- async function iniciar(){
-    const alumnos = await obtenerAlumnos()
-    mostrarAlumnos(alumnos)
- }
-iniciar()
+//  async function iniciar(){
+//     const alumnos = await obtenerAlumnos()
+//     mostrarAlumnos(alumnos)
+//  }
+// iniciar()
 
 // /post
 // /comments
@@ -147,3 +147,52 @@ iniciar()
 //     mostrarComments(comments)
 //  }
 //  iniciarComments()
+
+const formulario = document.querySelector("#formAlumno")
+
+formulario.addEventListener("submit", function (event){
+   event.preventDefault();
+
+const nombre = document.querySelector("#nombre").value
+const carrera = document.querySelector("#carrera").value
+const correo = document.querySelector("#correo").value
+const listaAlumnos = document.querySelector("#listaAlumnos")
+console.log(nombre, carrera, correo) //para ver la info q' contiene
+
+//creación de los objetos
+const alumno = {
+   id: Date.now(),
+   nombre: nombre,
+   carrera: carrera,
+   correo: correo
+}
+   const alumnos = obtenerAlumnos()
+   alumnos.push(alumno)
+
+   localStorage.setItem("alumnos", JSON.stringify(alumnos))
+   
+   
+   mostraAlumnos(alumnos)
+   formulario.reset()
+});
+
+
+function obtenerAlumnos (){
+   const datos = localStorage.getItem("alumnos")
+   if (datos) {
+      return JSON.parse(datos) 
+   }
+   return [] //evita q devuelva null
+}
+
+function mostraAlumnos (alumnos){
+   listaAlumnos.innerHTML = "" 
+   for (const alumno of alumnos){
+      listaAlumnos.innerHTML += `
+      <li>
+         ${alumno.nombre} - 
+         ${alumno.carrera} -
+         ${alumno.correo}
+      </li>`;
+   }
+}

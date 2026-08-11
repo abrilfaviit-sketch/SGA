@@ -78,24 +78,34 @@
 // }
 // mostrarDocentes()
 
-// async  function obtenerAlumnos(){
-// const respuesta = await fetch("https://jsonplaceholder.typicode.com/users")   
-// const alumnos = await respuesta.json() 
-// return alumnos
-// }
-// function mostrarAlumnos(alumnos){
-//      console.table(alumnos)
-    // console.log(alumnos [5])
+async  function obtenerAlumnos(){
+const respuesta = await fetch("https://jsonplaceholder.typicode.com/users")   
+const alumnos = await respuesta.json() 
+return alumnos
+}
+function mostrarAlumnos(alumnos){
+   //  console.table(alumnos)
+    console.log(typeof alumnos )
+    localStorage.setItem("alumnos", JSON.stringify(alumnos)) 
+    const datos = localStorage.getItem("alumnos")
+    console.log(typeof datos)
+    console.log(datos)
+    const alumnosRecuperados = JSON.parse(datos) 
+    console.log( typeof alumnosRecuperados) 
+    console.table(alumnosRecuperados)
+   
+    
+
     // for (const alumno of alumnos) {
     //     console.log(alumno.id, alumno.name, alumno.email)
     // }
-//}
+}
 
-//  async function iniciar(){
-//     const alumnos = await obtenerAlumnos()
-//     mostrarAlumnos(alumnos)
-//  }
-// iniciar()
+ async function iniciar(){
+    const alumnos = await obtenerAlumnos()
+    mostrarAlumnos(alumnos)
+ }
+iniciar()
 
 // /post
 // /comments
@@ -120,20 +130,20 @@
 //  iniciarPosts()
 
 
- async function obtenerComments(){
-    const respuesta = await fetch("https://jsonplaceholder.typicode.com/comments") //puedo indicar un limite
-    const comments = await respuesta.json()
-    return comments
-}
+//  async function obtenerComments(){
+//     const respuesta = await fetch("https://jsonplaceholder.typicode.com/comments") //puedo indicar un limite
+//     const comments = await respuesta.json()
+//     return comments
+// }
 
-function mostrarComments(comments){
-    for ( const c of comments) {
-        console.log(c.postId, c.name, c.id)
-    }
+// function mostrarComments(comments){
+//     for ( const c of comments) {
+//         console.log(c.postId, c.name, c.id)
+//     }
 
-}
- async function iniciarComments(){
-    const comments = await obtenerComments()
-    mostrarComments(comments)
- }
- iniciarComments()
+// }
+//  async function iniciarComments(){
+//     const comments = await obtenerComments()
+//     mostrarComments(comments)
+//  }
+//  iniciarComments()

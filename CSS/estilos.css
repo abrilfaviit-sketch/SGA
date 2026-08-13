@@ -65,3 +65,38 @@ th, td{
 th{
     background-color: #1f2937;
 }
+
+.mje-exito {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    background-color: rgb(123, 93, 172);
+    color: #2e0242;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.mje-error{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    background-color: #fee2e2;
+    color: firebrick;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.oculto{
+    display: none;
+}
+
+.mje-exito{
+    color:rgb(6, 0, 14)
+}
+

@@ -22,9 +22,9 @@ Durante el desarrollo del proyecto se incorporarán progresivamente nuevas tecno
 ## Tecnologías
 Actualmente:
 - HTML5
-Próximamente:
 - CSS3
 - JavaScript
+Próximamente:
 - React
 - Node.js
 - Express
@@ -37,3 +37,17 @@ Próximamente:
 
 Nombre del estudiante: Abril Pérez Favit
 Programación IV
+
+# Estructura actual -clase 10
+SGA/
+|
+|---index.html
+|--- alumnos.html
+|--- docentes.html
+|
+|--- css/
+|    |--estilos.css
+|
+|---Js/
+    |--alumnos.js
+    |--docentes.js

@@ -144,6 +144,10 @@ th{
     background-color: #16a34a;
 }
 
+.mje-adv{
+    background-color: yellow;
+}
+
 .inicio{
     text-align: center;
     max-width: 1000px;
@@ -197,4 +201,17 @@ th{
 .tarjeta-deshabilitada:hover{
     transform: none;
     box-shadow:  0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.acciones-form{
+    display: flex;
+    gap: 10px;
+}
+
+.btn-cancelar{
+    background-color: #6b7280;
+}
+
+.btn-cancelar:hover{
+    background-color: #16a34a;
 }

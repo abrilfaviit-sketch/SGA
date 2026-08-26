@@ -153,7 +153,9 @@ const mensaje = document.querySelector("#mensaje")
 const listaAlumnos = document.querySelector("#listaAlumnos")
 let alumnosEditandoId = null
 let alumnoEditar = null
-
+const btnCancelar = document.querySelector("#btnCancelar")
+btnCancelar.computedStyleMap.display = "none"
+const btnGuardar = document.querySelector("#btnGuardar")
 
 
 formulario.addEventListener("submit", function (event) {
@@ -210,13 +212,13 @@ formulario.addEventListener("submit", function (event) {
    //    return
    //     }
    if (JSON.stringify(datosActuales) === JSON.stringify(alumnoEditar)){    //opción 2
-      mostrarMensaje ("No se realizaron cambios", "mje-error")
+      mostrarMensaje ("No se realizaron cambios", "mje-adv")
       return
    }
 
    alumnosEditandoId = null
    alumnoEditar = null
-   formulario.querySelector("button").textContent = "Guardar Alumno"
+   btnGuardar.textContent = "Guardar Alumno"
 
    mostrarMensaje("Alumno actualizado correctamente")
 }
@@ -257,10 +259,11 @@ function mostraAlumnos(alumnos) {
 function eliminarAlumno(id) {
    const alumnos = obtenerAlumnos()
    const alumnosActualizados = alumnos.filter(
-      alumno => alumno.id !== id
-   );
+      alumno => alumno.id !== id);
+
    localStorage.setItem("alumnos", JSON.stringify(alumnosActualizados))
    mostraAlumnos(alumnosActualizados)
+
    mostrarMensaje("Alumno eliminado correctamente", "mje-exito")
 }
 
@@ -289,12 +292,25 @@ function editarAlumno(id) {
    }
 
    alumnosEditandoId = id;
-   formulario.querySelector("button").textContent = "Actualizar Alumno"
+   btnCancelar.style.display = "inline-block"
+   btnGuardar.textContent = "Actualizar Alumno"
+   document.querySelector("#nombre").focus()
 }
 
 
 
 //en edutech hay q hacer el alta y baja de preceptores ajja
+function cancelarEdicion (){
+   formulario.reset()
+   alumnosEditandoId = null
+   alumnoEditar = null
+   btnGuardar.textContent = "Guardar Alumno"
+   btnCancelar.style.display = "none"
+   document.querySelector("#nombre").focus()
+}
+
+btnCancelar.addEventListener("clic", cancelarEdicion)
+
 
 const alumnos = obtenerAlumnos();
 mostraAlumnos(alumnos)

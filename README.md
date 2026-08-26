@@ -38,8 +38,9 @@ Próximamente:
 Nombre del estudiante: Abril Pérez Favit
 Programación IV
 
-# Estructura actual -clase 10
+# Estructura actual -clase 12
 SGA/
+frontend
 |
 |---index.html
 |--- alumnos.html
@@ -49,6 +50,20 @@ SGA/
 |    |--estilos.css
 |
 |---Js/
-    |--alumnos.js
-    |--docentes.js
-    
+|   |--alumnos.js
+|   |--docentes.js
+|
+|--backend
+
+
+
+
+## estado actual
+-Página de inicio y navegación entre módulos
+-Módulo alumnos docentes
+-Crud alumnos/docentes
+-Validaciones de formulario 
+-Persistencia mediante localStorage
+-Organización del código y refactorización
+-Separación inicial entre frontend y backend
+## almacenamiento

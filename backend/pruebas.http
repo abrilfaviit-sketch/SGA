@@ -3,5 +3,42 @@ get http://localhost:3000/alumnos
 ###
 get http://localhost:3000/alumnos/3
 
-###
+### //para hacer una nueva prueba de solicitud
 get http://localhost:3000/docentes/6
+
+### Petición para crear alumno
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "id": 3,
+    "nombre": "Lucía",
+    "carrera": "Programación"
+}
+ //body, info q recibe el servidor, del nuevo usuario
+
+//ejercicio de practica
+###
+POST  http://localhost:3000/alumnos
+Content-Type: application/json
+
+{      
+    "id": 9,
+    "nombre": "Pepita",
+    "carrera": "Programación"
+}
+
+###
+PUT http://localhost:3000/alumnos/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "nombre": "Juan Pérez",
+    "carrera": "Musica"
+}
+ 
+
+###
+
+GET http://localhost:3000/alumnos

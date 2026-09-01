@@ -1,8 +1,12 @@
 const express =  require("express")
 const app = express()
 app.use(express.json()) //para q el servidor lo interprete
+const alumnosRoutes = require("./routes/alumnos.routes.js")
+app.use("/alumnos", alumnosRoutes)
 
-const alumnos = [
+
+
+let alumnos = [  //cambie el const por let
     {
         id: 1,
         nombre: "julian",
@@ -34,21 +38,13 @@ const alumnos = [
         carrera:"Organizacion de empresas"
     }
 ]
-app.get("/alumnos", (req, res) => {
-    res.json(alumnos)
-})
 
-app.get("/alumnos/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(a => a.id === id)
-    res.json(alumno)
-})
-//31/08/26 creamos solicitud
-app.post("/alumnos", (req, res) => {
-    const nuevoAlumno = req.body
-    alumnos.push(nuevoAlumno)
-    res.json({mensaje: "Alumno registrado correctamente"})
-})
+//creamos middleware
+// app.use((req, res, next) => {
+//     console.log(req.method)
+//     console.log(req.url)
+//     next() //esto lo q hace es mostrarte la respuesta el cuadrito 
+// })
 
 
 //hacer docentes 5 
@@ -94,14 +90,13 @@ app.get("/docentes/:id", (req, res) => {
     res.json(docente)
 })
 
-app.put("/alumnos/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(alumno => alumno.id === id)
-    alumno.id = req.body.id
-    alumno.nombre = req.body.nombre
-    alumno.carrera = req.body.carrera
-    res.json({mensaje:"Alumno actualizado correctamente"})
-})
+
+
 app.listen(3000, () => {
     console.log("Servidor funcionando en http://localhost:3000")
 })
+
+//01/0/26
+//crear nuestro propio middleware y lo comente
+//podemos observar cada petición antes de q continúe
+

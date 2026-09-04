@@ -1,12 +1,22 @@
 const express = require("express")
-const router = express.Router() //router para grupar y definir los archivos
+const { obtenerDocentes, obtenerDocente, crearDocente, actualizarDocente, eliminarDocente} = require("../controllers/docentes.controllers.js")
+const docentes = require("../data/docentes.js") // Importamos la lista de docentes
 
-router.get("/", (req, res) => {
-    res.json(docentes)
-})
+const router = express.Router() // Router para agrupar y definir las rutas
 
-router.get("/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const docente = docentes.find(a => a.id === id)
-    res.json(docente)
-})
+// Rutas
+router.get("/", obtenerDocentes)
+
+router.get("/:id", obtenerDocente)
+
+router.post("/", crearDocente)
+
+router.put("/", actualizarDocente)
+
+router.delete("/:id", eliminarDocente)
+
+
+
+// 31/08/26 creamos solicitud
+
+module.exports = router// Exporta el router completo

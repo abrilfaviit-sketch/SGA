@@ -46,3 +46,13 @@ GET http://localhost:3000/alumnos
 
 ### 
 delete http://localhost:3000/alumnos/2
+
+//03/09/26
+
+###
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{ //aunque este vacio se manda igual y no debe pasar
+   "nombre": 123
+}

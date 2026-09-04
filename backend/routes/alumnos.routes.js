@@ -1,32 +1,22 @@
 const express = require("express")
-const router = express.Router() //router para grupar y definir los archivos
+const { obtenerAlumnos, obtenerAlumno, crearAlumno, actualizarAlumno, eliminarAlumno} = require("../controllers/alumnos.controllers.js")
+const alumnos = require("../data/alumnos.js") // Importamos la lista de alumnos
 
+const router = express.Router() // Router para agrupar y definir las rutas
+
+// Rutas
 router.get("/", obtenerAlumnos)
 
-router.get("/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(a => a.id === id)
-    res.json(alumno)
-})
-//31/08/26 creamos solicitud
-router.post("/", (req, res) => {
-    const nuevoAlumno = req.body
-    alumnos.push(nuevoAlumno)
-    res.json({mensaje: "Alumno registrado correctamente"})
-})
-router.put("/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(alumno => alumno.id === id)
-    alumno.id = req.body.id
-    alumno.nombre = req.body.nombre
-    alumno.carrera = req.body.carrera
-    res.json({mensaje:"Alumno actualizado correctamente"})
-})
+router.get("/:id", obtenerAlumno)
 
-router.delete("/:id",  (req, res) => {  //no se puede poner filter ya q me modifica el array y es const y no se puede así q cambio const por let
-    const id = Number(req.params.id)
-    alumnos = alumnos.filter(alumno => alumno.id !== id)
-    res.json({mensaje: "Alumno eliminado correctamente"})
-})
+router.post("/", crearAlumno)
 
-module.exports = router //solicita cualquier ruta escrita
+router.put("/", actualizarAlumno)
+
+router.delete("/:id", eliminarAlumno)
+
+
+
+// 31/08/26 creamos solicitud
+
+module.exports = router// Exporta el router completo

@@ -3,12 +3,14 @@
 // const obtenerAlumnos = (req, res) {
 //     res.json(alumnos)
 // }
-const alumnos = require("../data/alumnos.js")
+const Alumno = require("../models/Alumno.js")//con este nuevo modelo ocupo nuevas funciones, de aca saca el esquema correspondiente
+//requiere conexion asincrona, xq el recurso está afuera de la app
+// 
 
-const obtenerAlumnos = (req, res) => {
+async function obtenerAlumnos (req, res)  {
+    const alumnos = await Alumno.find() //find es una funcion de mongoose q me permite buscar todos los alumnos
     res.json(alumnos)
 }
-
 function obtenerAlumno (req, res){
     const id = Number (req.params.id)
     const alumno = alumnos.find(a => a.id === id)

@@ -1,4 +1,3 @@
-//Hacer el js como el de alumnos.js
 const formulario = document.querySelector("#formulario")
 const mensaje = document.querySelector("#mensaje")
 const listaDocentes = document.querySelector("#listaDocentes")

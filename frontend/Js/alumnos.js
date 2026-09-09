@@ -148,62 +148,71 @@
 //  }
 //  iniciarComments()
 
+
+//variables globales y y estados
 const formulario = document.querySelector("#formulario")
 const mensaje = document.querySelector("#mensaje")
 const listaAlumnos = document.querySelector("#listaAlumnos")
 let alumnosEditandoId = null
 let alumnoEditar = null
 const btnCancelar = document.querySelector("#btnCancelar")
-btnCancelar.computedStyleMap.display = "none"
+btnCancelar.style.display = "none"
 const btnGuardar = document.querySelector("#btnGuardar")
+//
 
+//inicio de submit y captura de input
+formulario.addEventListener("submit", function (event) { 
+   event.preventDefault(); //el preventDefault () evita q' se recargue la página
 
-formulario.addEventListener("submit", function (event) {
-   event.preventDefault();
-
-   const nombre = document.querySelector("#nombre").value.trim()
-   const carrera = document.querySelector("#carrera").value.trim()
+   const nombre = document.querySelector("#nombre").value.trim() //los trim()guardan el texto de los input
+   const carrera = document.querySelector("#carrera").value.trim() //sin espacios sobrantes
    const correo = document.querySelector("#correo").value.trim()
+   //
 
-   if(nombre === "" ||  carrera === "" || correo === "") {
-      mostrarMensaje("Todos los campos son obligatorios", "mje-error")
+//Validaciones
+   if(nombre === "" ||  carrera === "" || correo === "") { 
+      mostrarMensaje("Todos los campos son obligatorios", "mje-error") //revisa q no haya campos vacios
       return 
    }
 
    if (!correo.includes ("@")){
-      mostrarMensaje("Ingrese un correo electronico válido", "mje-error")
+      mostrarMensaje("Ingrese un correo electronico válido", "mje-error") // q el correo lleve el @ 
       return
    }
 
    if(nombre.length < 3 ) {
-      mostrarMensaje("El nombre debe tener al menos 3 caracteres", "mje-error")
+      mostrarMensaje("El nombre debe tener al menos 3 caracteres", "mje-error") // q el nombre contenga minimo 3 letras
       return
    }
+//
 
-   const alumnos = obtenerAlumnos()
+//Crear alumno (modo alta)
+   const alumnos = obtenerAlumnos()//busca la lista en el storage.js
    //console.log(nombre, carrera, correo) //para ver la info q' contiene
 
-   if (alumnosEditandoId === null){
+   if (alumnosEditandoId === null){ //si esto da null el sistema entiende q'no esta editando nadie y entra en el if
    //creación de los objetos
-   const alumno = {
-      id: Date.now(),
+   const alumno = { //crea un objeto alumno 
+      id: Date.now(), //con ID unico
       nombre: nombre,
       carrera: carrera,
       correo: correo
    }
-   alumnos.push(alumno)
-   mostrarMensaje("Alumno guardado correctamente", "mje-exito")
+   alumnos.push(alumno) // lo suma al array con .push()
+   mostrarMensaje("Alumno guardado correctamente", "mje-exito") //muestra el mensaje de exito
+//
 
-}else{
-   const alumno = alumnos.find(alumno => alumno.id === alumnosEditandoId)
+//Alumno editando (modo modificación)
+}else{ //si tiene un id significa q' estas editando asi q' entra por el else para editarlo
+   const alumno = alumnos.find(alumno => alumno.id === alumnosEditandoId) //busca alumno por ID
    alumno.nombre = nombre
    alumno.carrera = carrera
    alumno.correo = correo
 
-   const datosActuales = {
-      nombre: nombre,
-      carrera: carrera,
-      correo: correo
+   const datosActuales = { //crea un objeto temporal con los datos q' el usuario acaba de escribir en los input
+      nombre: nombre,// q' solo sirve
+      carrera: carrera,//para luego
+      correo: correo //comparar
    }
    // if(datosActuales.nombre === alumnosEditar.nombre &&      //opción 1
    //    datosActuales.carrera === alumnosEditar.carrera &&
@@ -211,106 +220,111 @@ formulario.addEventListener("submit", function (event) {
    //    mostrarMensaje ("No se realizaron cambios", "mje-error")
    //    return
    //     }
-   if (JSON.stringify(datosActuales) === JSON.stringify(alumnoEditar)){    //opción 2
-      mostrarMensaje ("No se realizaron cambios", "mje-adv")
-      return
+   if (JSON.stringify(datosActuales) === JSON.stringify(alumnoEditar)){    //opción 2 //lo actualiza con json.stringify
+      mostrarMensaje ("No se realizaron cambios", "mje-adv") //muestra mensaje de advertencia
+      return 
    }
-
+   //si no cambia nada corta la ejecución
    alumnosEditandoId = null
    alumnoEditar = null
    btnGuardar.textContent = "Guardar Alumno"
 
-   mostrarMensaje("Alumno actualizado correctamente")
+   mostrarMensaje("Alumno actualizado correctamente") //muestra mensaje
 }
+//
 
+//Guardado, renderizado y reset
    //localStorage.setItem("alumnos", JSON.stringify(alumnos))
-   guardarDatos("alumnos", alumnos)
-
-   mostraAlumnos(alumnos)
-   formulario.reset()
+   guardarDatos("alumnos", alumnos) //persiste los cambios en el almacenamiento
+   mostraAlumnos(alumnos) //vuelve a dibujar la tabla
+   formulario.reset() //vacia el formulario
 });
+//
 
-
-function obtenerAlumnos() {
-  return obtenerDatos("alumnos")
+//Función de lectura
+function obtenerAlumnos() { //pide la lista de alumnos
+  return obtenerDatos("alumnos") // q' está guardada en el storage.js
 }
+//
 
 
 
-
-function mostraAlumnos(alumnos) {
-   listaAlumnos.innerHTML = ""
-   for (const alumno of alumnos) {
+function mostraAlumnos(alumnos) { //vacia las tablas
+   listaAlumnos.innerHTML = "" //
+   for (const alumno of alumnos) { //inyecta las filas con un bucle for or 
       listaAlumnos.innerHTML += `
       <tr>
          <td>${alumno.id}</td>
          <td>${alumno.nombre}</td>
          <td>${alumno.carrera}</td>
          <td>${alumno.correo}</td>
-         <td>
+         <td> 
             <button class="btn-editar" data-id="${alumno.id}">Editar</button>  
             <button class="btn-eliminar" data-id="${alumno.id}">Eliminar</button>
             </td>
       </tr>
-      `;
+      `;//con data-id le asigna a cada botón el id del alumno, fila 258 y259
    } //lineas 210 y 211 se vinculo los botones con los id de los alumnos
 }
+//Eliminar alumno
+function eliminarAlumno(id) { //funcion q' se activa al apretar el boton eliminar
+   const alumnos = obtenerAlumnos() //llama a la lista guardada en storage.js
+   const alumnosActualizados = alumnos.filter(alumno => alumno.id !== id); //usa .filter() para armar un array sin el alumno borrado
+   localStorage.setItem("alumnos", JSON.stringify(alumnosActualizados)) //guarda 
+   mostraAlumnos(alumnosActualizados)//refresca la tabla
 
-function eliminarAlumno(id) {
-   const alumnos = obtenerAlumnos()
-   const alumnosActualizados = alumnos.filter(
-      alumno => alumno.id !== id);
-
-   localStorage.setItem("alumnos", JSON.stringify(alumnosActualizados))
-   mostraAlumnos(alumnosActualizados)
-
-   mostrarMensaje("Alumno eliminado correctamente", "mje-exito")
+   mostrarMensaje("Alumno eliminado correctamente", "mje-exito")//muestra un mensaje de exito
 }
+//
 
-listaAlumnos.addEventListener("click", (e) => {
-   if (e.target.classList.contains("btn-eliminar")) {
-      const id = Number(e.target.dataset.id)
-      eliminarAlumno(id)
+//Delegación de eventos (clics en table)
+listaAlumnos.addEventListener("click", (e) => { //escuchá los clics en la tabla
+   if (e.target.classList.contains("btn-eliminar")) {//si tocas el botón eliminar
+      const id = Number(e.target.dataset.id) //saca el data-id del botón
+      eliminarAlumno(id) // ejecuta la acción correspondiente
    }
-   if (e.target.classList.contains("btn-editar")){
-      const id = Number(e.target.dataset.id)
-      editarAlumno(id)
+   if (e.target.classList.contains("btn-editar")){ // o tocas el botón editar 
+      const id = Number(e.target.dataset.id) //saca el data-id del botón
+      editarAlumno(id) //ejecuta la acción correspondiente
    }
 })
+//
 
-function editarAlumno(id) {
-   const alumnos = obtenerAlumnos()
-   const alumno = alumnos.find(alumno => alumno.id === id)
-   document.querySelector("#nombre").value = alumno.nombre;
-   document.querySelector("#carrera").value = alumno.carrera;
-   document.querySelector("#correo").value = alumno.correo;
+//Cargar datos para editar
+function editarAlumno(id) { //función q' se activa a apretar editar
+   const alumnos = obtenerAlumnos() //trae el array guardado en el storage.js
+   const alumno = alumnos.find(alumno => alumno.id === id) //de todo el array busca el q' coincida con el id
+   document.querySelector("#nombre").value = alumno.nombre; //carga el nombre del alumno en la casilla
+   document.querySelector("#carrera").value = alumno.carrera; //carrrera
+   document.querySelector("#correo").value = alumno.correo; //correo
 
-   alumnoEditar = {
+   alumnoEditar = { //pasa sus datos a los input
       nombre: alumno.nombre,
-      carrera: alumno,carrera,
+      carrera: alumno.carrera,
       correo: alumno.correo
    }
 
-   alumnosEditandoId = id;
-   btnCancelar.style.display = "inline-block"
-   btnGuardar.textContent = "Actualizar Alumno"
-   document.querySelector("#nombre").focus()
+   alumnosEditandoId = id; //guarda el id del alumno q' se esta editando
+   btnCancelar.style.display = "inline-block" //muestra el botón cancelar
+   btnGuardar.textContent = "Actualizar Alumno" //cambia el texto del botón a guardar
+   document.querySelector("#nombre").focus()//Hace que el cursor empiece a parpadear automáticamente dentro del campo "Nombre", listo para que el usuario escriba directamente sin tener que hacer clic con el mouse.
 }
+//
 
 
-
-//en edutech hay q hacer el alta y baja de preceptores ajja
-function cancelarEdicion (){
-   formulario.reset()
-   alumnosEditandoId = null
-   alumnoEditar = null
+//Cancelar edición
+function cancelarEdicion (){//limpia la pantalla y vuelve el formulario a modo crear
+   formulario.reset() //vacia los input
+   alumnosEditandoId = null//Borra el ID guardado en memoria
+   alumnoEditar = null//borra la copia del objeto creada para comparar
    btnGuardar.textContent = "Guardar Alumno"
-   btnCancelar.style.display = "none"
+   btnCancelar.style.display = "none" //oculta el botón cancelar
    document.querySelector("#nombre").focus()
 }
 
-btnCancelar.addEventListener("clic", cancelarEdicion)
+btnCancelar.addEventListener("click", cancelarEdicion) //vuelve al sistema en modo "Alta"
+//
 
-
-const alumnos = obtenerAlumnos();
-mostraAlumnos(alumnos)
+// Carga inicial 
+const alumnos = obtenerAlumnos(); //trae los alumnos al abrir la página
+mostraAlumnos(alumnos) //dibuja la tabla por primera vez

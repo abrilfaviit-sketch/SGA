@@ -24,10 +24,10 @@ Actualmente:
 - HTML5
 - CSS3
 - JavaScript
+- Express
+- Node.js
 Próximamente:
 - React
-- Node.js
-- Express
 - MongoDB
 
 ## Estado del proyecto
@@ -66,4 +66,20 @@ frontend
 -Persistencia mediante localStorage
 -Organización del código y refactorización
 -Separación inicial entre frontend y backend
+-Implemtación de validaciones para los datos recibidos mediante req.body
+-Uso de status 4004 para datos invalidos
+-status 404 para alumos no encontrado s
+-status 2201 para registrar nuevo alumno
+-Manejo basico  de errores en las operaciones del crud
+-Instalaciones con mongoose
+-Creación de la conexión con Mongodb en config/database.js
+-Creación del Schema y modelo Alumno
+-Reemplazo del array en memoria por una conexión en mongoDB
+-Modificación de alumnos para consultar mongoDB mediante mongoose
+-Prueba de la API con datos almacenados en mongoDB
 ## almacenamiento
+localStorage
+JSON.stringify()
+JSON:parse()
+mongoDB
+## Clase 14 -- post-body-express.json()

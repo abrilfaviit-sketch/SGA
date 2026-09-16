@@ -4,11 +4,19 @@
 const mongoose = require("mongoose")
 
 const alumnoSchema = new mongoose.Schema({ //describe la estructura 
-    legajo: Number,
+    legajo:{
+        type: Number,//convierte el valor a un valor entero
+        unique: true, //para q no se repita el legajo
+
+    },
     nombre: String,
     carrera: String,
     correo: String
-})
+},
+{
+    versionKey: false //para q no me muestre la version de la base de datos
+}
+)
 
 const Alumno = mongoose.model("Alumno", alumnoSchema) //model permite trabajar con esa lista de alumnos, mogoose se encarga de guardar
 

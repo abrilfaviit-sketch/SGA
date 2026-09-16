@@ -1,19 +1,20 @@
 get http://localhost:3000/alumnos
 
 ###
-get http://localhost:3000/alumnos/3
+get http://localhost:3000/alumnos/1003
 
 ### //para hacer una nueva prueba de solicitud
 get http://localhost:3000/docentes/6
 
 ### Petición para crear alumno
-POST http://localhost:3000/alumnos
+POST http://localhost:3000/alumnos/1020
 Content-Type: application/json
 
 {
-    "id": 3,
-    "nombre": "Lucía",
-    "carrera": "Programación"
+    //"legajo": 1020,
+    "nombre": "Rominita",
+    "carrera": "Literatura",
+    "correo": "romina@example.com"
 }
  //body, info q recibe el servidor, del nuevo usuario
 
@@ -23,29 +24,30 @@ POST  http://localhost:3000/alumnos
 Content-Type: application/json
 
 {      
-    "id": 9,
+    "legajo": "1020",
     "nombre": "Pepita",
-    "carrera": "Programación"
+    "carrera": "Programación",
+    "correo": "pepita@example.com"
 }
 
 ###
-PUT http://localhost:3000/alumnos/2
+PUT http://localhost:3000/alumnos/1020
 Content-Type: application/json
 
 {
-    "id": 2,
-    "nombre": "Juan Pérez",
-    "carrera": "Musica"
+    "legajo": 1020,
+    "nombre": "Rominita Pérez",
+    "carrera": "Musica",
+    "correo": "romi@example.com"
 }
  
 
 ###
 
-GET http://localhost:3000/alumnos
-
+GET http://localhost:3000/alumnos/1020
 
 ### 
-delete http://localhost:3000/alumnos/2
+delete http://localhost:3000/alumnos/1003
 
 //03/09/26
 
@@ -56,3 +58,5 @@ Content-Type: application/json
 { //aunque este vacio se manda igual y no debe pasar
    "nombre": 123
 }
+
+//solicionar código, no me tira lo de 1030 en el put ni en el get

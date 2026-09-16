@@ -7,13 +7,14 @@ const Alumno = require("../models/Alumno.js")//con este nuevo modelo ocupo nueva
 //requiere conexion asincrona, xq el recurso está afuera de la app
 // 
 
-async function obtenerAlumnos (req, res)  {
+async function obtenerAlumnos (req, res){
     const alumnos = await Alumno.find() //find es una funcion de mongoose q me permite buscar todos los alumnos
     res.json(alumnos)
 }
-function obtenerAlumno (req, res){
-    const id = Number (req.params.id)
-    const alumno = alumnos.find(a => a.id === id)
+async function obtenerAlumno (req, res){ //findById es una funcion de mongoose q me permite buscar un alumno por su id
+    const alumno = await Alumno.findOne({
+        legajo: Number(req.params.id)
+    })//findOne es una funcion de mongoose q me permite buscar un alumno por su legajo
     if (!alumno) {
         return res.status(404).json({
             mensaje:"Alumno no encontrado"
@@ -22,54 +23,68 @@ function obtenerAlumno (req, res){
     res.json(alumno)
 }
 
-function crearAlumno  (req, res) {
-    const nuevoAlumno = req.body
-    const {id, nombre, carrera } = req.body
-    if (!id || !nombre || !carrera){
+async function crearAlumno  (req, res) {
+    const {legajo, nombre, carrera, correo} = req.body
+    if (!legajo || !nombre || !carrera || !correo){
         return res.status(400).json({
             mensaje:"Todos los campos son obligatorios"
             })
     }
     if (typeof nombre !== "string"){
-        returnres.status(400).json({
+        return res.status(400).json({
             mensaje:"El nombre debe ser un texto"
         })
     }
-
-    alumnos.push(nuevoAlumno)
-    res.status(201).json({
-         mensaje: "Alumno registrado correctamente" 
+    if (typeof legajo !== "number"){
+        return res.status(400).json({
+            mensaje: "El legajo debe ser un número"
         })
+    }
+    const existe = await Alumno.findOne({
+        legajo
+    })
+    if (existe){
+        return res.status(400).json({
+            mensaje: "El legajo ya existe"
+        })
+    }
+
+
+  const nuevoAlumno = await Alumno.create({
+    legajo,
+    nombre,
+    carrera,
+    correo
+  })
+  res.status(201).json(nuevoAlumno)
+       
 }
 
-function actualizarAlumno (req, res)  {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(a => a.id === id)
+async function actualizarAlumno (req, res)  {
+    const {nombre, carrera, correo} = req.body //desestructuro el body para obtener los datos que quiero actualizar
+    const alumno = await Alumno.findOneAndUpdate(
+       { legajo: Number(req.params.id)},
+        {nombre, carrera, correo},
+        {returnDocument: "after"}//devuelve el documento viejo 
+    )
     if(!alumno){
        return res.status(404).json({
             mensaje:"Alumno no encontrado"
         })
     }
-    alumno.id = req.body.nombre
-    alumno.carrera = req.body.carrera
-
-    res.json({mensaje:"Alumno actualizado correctamente"})
+    res.json(alumno)
 }
 
-function eliminarAlumno  (req, res)  {
-    const id = Number(req.params.id)
-    const alumno = alumnos.find(a => a.id === id)
+async function eliminarAlumno  (req, res)  {
+    const alumno = await Alumno.findOneAndDelete(
+        {legajo: Number(req.params.id)}
+    )
     if(!alumno){
        return res.status(404).json({
             mensaje:"Alumno no encontrado"
         })
     }
-    const alumnosActualizados = alumnos.filter(alumno => alumno.id !== id)
-
-    alumnos.length = 0
-    alumnos.push(...alumnosActualizados)
-
-    res.json({mensaje: "Alumno eliminado corretamente"})
+    res.json({mensaje: "Alumno eliminado correctamente"})
 }
 
 module.exports = { obtenerAlumnos, 

@@ -151,7 +151,7 @@
 
 //variables globales y y estados
 const formulario = document.querySelector("#formulario")
-const mensaje = document.querySelector("#mensaje")
+//const mensaje = document.querySelector("#mensaje")
 const listaAlumnos = document.querySelector("#listaAlumnos")
 let alumnosEditandoLegajo = null
 let alumnoEditar = null
@@ -195,76 +195,84 @@ formulario.addEventListener("submit", async function (event) {
    }
    //
 
-   
 
-   //POST xq hay q hacer un nuevo alumno
-   if (alumnosEditandoLegajo === null) { //si esto da null el sistema entiende q'no esta editando nadie y entra en el if
-      //creación de los objetos
-      const alumno = { //crea un objeto alumno 
-         legajo: Number(legajo), //convierte el legajo a número
-         nombre: nombre,
-         carrera: carrera,
-         correo: correo
-      }
-      //borramos el push xq ya no estamos trabajando con storage
-      const respuesta = await fetch(API_ALUMNOS, {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json" //le decimos q' le vamos a pasar un json
-         },
-         body: JSON.stringify(alumno)
-      })
-      if (!respuesta.ok) {//respuesta no ok significa q' hubo un error en la petición
-         mostrarMensaje("No se pudo guardar el alumno", "mje- error") //muestra mensaje de error
-         return
-      }
-      mostrarMensaje("Alumno guardado correctamente", "mje-exito") //muestra el mensaje de exito
-      //
-
-      //Alumno editando (modo modificación) PUT
-   } else { //si tiene un id significa q' estas editando asi q' entra por el else para editarlo
-      const datosActuales = { //crea un objeto temporal con los datos q' el usuario acaba de escribir en los input
-         nombre: nombre,// q' solo sirve
-         carrera: carrera,//para luego
-         correo: correo //comparar
-      }
-      if (JSON.stringify(datosActuales) === JSON.stringify(alumnoEditar)) {    //opción 2 //lo actualiza con json.stringify
-         mostrarMensaje("No se realizaron cambios", "mje-adv") //muestra mensaje de advertencia
-         return
-      }
-      //si no cambia nada corta la ejecución
-      const respuesta = await fetch(`${API_ALUMNOS}/${alumnosEditandoLegajo}`, {
-         method: "PUT",
-         headers: {
-            "Content-Type": "application/json"
-         },
-         body: JSON.stringify({ //cuerpo del legajo, nombre, carrera y correo q' se van a actualizar
+   try {
+      //POST xq hay q hacer un nuevo alumno
+      if (alumnosEditandoLegajo === null) { //si esto da null el sistema entiende q'no esta editando nadie y entra en el if
+         //creación de los objetos
+         const alumno = { //crea un objeto alumno 
+            legajo: Number(legajo), //convierte el legajo a número
             nombre: nombre,
             carrera: carrera,
             correo: correo
+         }
+         //borramos el push xq ya no estamos trabajando con storage
+         const respuesta = await fetch(API_ALUMNOS, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json" //le decimos q' le vamos a pasar un json
+            },
+            body: JSON.stringify(alumno)
          })
-      })
-      if(!respuesta.ok){
-         mostrarMensaje("No se pudo actualizar el alumno", "mje-error")
-         return 
+         if (!respuesta.ok) {//respuesta no ok significa q' hubo un error en la petición
+           throw new Error("La API respondió con un error.")
+         }
+         mostrarMensaje("Alumno guardado correctamente", "mje-exito") //muestra el mensaje de exito
+         //
+
+         //Alumno editando (modo modificación) PUT
+      } else { //si tiene un id significa q' estas editando asi q' entra por el else para editarlo
+         const datosActuales = { //crea un objeto temporal con los datos q' el usuario acaba de escribir en los input
+            nombre: nombre,// q' solo sirve
+            carrera: carrera,//para luego
+            correo: correo //comparar
+         }
+         if (JSON.stringify(datosActuales) === JSON.stringify(alumnoEditar)) {    //opción 2 //lo actualiza con json.stringify
+            mostrarMensaje("No se realizaron cambios", "mje-adv") //muestra mensaje de advertencia
+            return
+         }
+         //si no cambia nada corta la ejecución
+         const respuesta = await fetch(`${API_ALUMNOS}/${alumnosEditandoLegajo}`, {
+            method: "PUT",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ //cuerpo del legajo, nombre, carrera y correo q' se van a actualizar
+               nombre: nombre,
+               carrera: carrera,
+               correo: correo
+            })
+         })
+         if (!respuesta.ok) {
+            throw new Error("La API respondió con un error.")
+         }
+         alumnosEditandoLegajo = null
+         alumnoEditar = null
+         btnGuardar.textContent = "Guardar Alumno"
+         document.querySelector("#legajo").disabled = false //habilita el input legajo para q' se pueda modificar
+         mostrarMensaje("Alumno actualizado correctamente") //muestra mensaje
       }
-      alumnosEditandoLegajo = null
-      alumnoEditar = null
-      btnGuardar.textContent = "Guardar Alumno"
-      document.querySelector("#legajo").disabled = false //habilita el input legajo para q' se pueda modificar
-      mostrarMensaje("Alumno actualizado correctamente") //muestra mensaje
+      //
+      await actualizarListaAlumnos() //vuelve a dibujar la tabla
+      formulario.reset() //vacia el formulario
+   } catch (error) {
+      console.error(error.message) //muestra el error en la consola
+      mostrarMensaje("No fue posible mostrar la operación", "mje-error")
    }
-  //
-   await actualizarListaAlumnos() //vuelve a dibujar la tabla
-   formulario.reset() //vacia el formulario
 });
 //
 
+
 //Función de lectura
 async function obtenerAlumnos() { //pide la lista de alumnos
+   try{
    const respuesta = await fetch(API_ALUMNOS) //trae la lista de alumnos del backend, la declaramos a la variable arriba, para no poner todas las veces la ruta
    const alumnos = await respuesta.json() //convierte la respuesta en un objeto
    return alumnos //devuelve la lista de alumnos
+   }catch (error){
+      console.error(error.menssage)
+      throw error
+   }
 }
 //
 
@@ -288,15 +296,15 @@ function mostraAlumnos(alumnos) { //vacia las tablas
    } //lineas 210 y 211 se vinculo los botones con los legajos de los alumnos
 }
 //Eliminar alumno
- async function eliminarAlumno(legajo) { //funcion q' se activa al apretar el boton eliminar
-   const respuesta = await fetch( `${API_ALUMNOS}/${legajo}`,{
+async function eliminarAlumno(legajo) { //funcion q' se activa al apretar el boton eliminar
+   const respuesta = await fetch(`${API_ALUMNOS}/${legajo}`, {
       method: "DELETE"
    })
-   if(!respuesta.ok){
-       mostrarMensaje("No se pudo eliminar el alumno", "mje-error")//muestra un mensaje de exito
-       return
+   if (!respuesta.ok) {
+      mostrarMensaje("No se pudo eliminar el alumno", "mje-error")//muestra un mensaje de exito
+      return
    }
-   if(alumnoEditandoLegajo === legajo){
+   if (alumnosEditandoLegajo === legajo) {
       formulario.reset() //vacia el formulario
       alumnoEditar = null
       alumnosEditandoLegajo = null
@@ -306,11 +314,15 @@ function mostraAlumnos(alumnos) { //vacia las tablas
    }
    mostrarMensaje("Alumno eliminado correctamente", "mje-exito")//muestra un mensaje de exito
    await actualizarListaAlumnos()
-  
+
 }
-async function actualizarListaAlumnos(){
+async function actualizarListaAlumnos() {
+   try{
    const alumnos = await obtenerAlumnos() //trae los alumnos y los muestra
    mostraAlumnos(alumnos) //dibuja la tabla
+   }catch(error){
+      mostrarMensaje("No se pudo cargar la lista de alumnos", "mje-error")
+   }
 }
 
 //Delegación de eventos (clics en table)
@@ -327,11 +339,11 @@ listaAlumnos.addEventListener("click", (e) => { //escuchá los clics en la tabla
 //
 
 //Cargar datos para editar
- async function editarAlumno(legajo) { //función q' se activa a apretar editar
-   const alumnos =  await obtenerAlumnos() //trae el array guardado en el storage.js
+async function editarAlumno(legajo) { //función q' se activa a apretar editar
+   const alumnos = await obtenerAlumnos() //trae el array guardado en el storage.js
    const alumno = alumnos.find(alumno => alumno.legajo === legajo) //de todo el array busca el q' coincida con el legajo
-   
-   if(!alumno){
+
+   if (!alumno) {
       mostrarMensaje("Alumno no encontrado", "mje-error") //muestra mensaje de error
       return
    }

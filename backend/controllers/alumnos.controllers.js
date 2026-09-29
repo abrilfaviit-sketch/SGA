@@ -1,5 +1,6 @@
 // const alumnos = require('../data/alumnos')
 
+//alumnos controller se encarga de manejar la logica de negocio, es decir, lo q se va a hacer con los datos, como mostrarlos, crearlos, actualizarlos o eliminarlos
 // const obtenerAlumnos = (req, res) {
 //     res.json(alumnos)
 // }

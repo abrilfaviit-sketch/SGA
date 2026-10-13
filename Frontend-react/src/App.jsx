@@ -6,7 +6,7 @@
 // import CambiarTitulo from './components/ejemplos/CambiarTitulo'
 // // import {Adivina} from './components/ejemplos/Adivina'
 // import Pantalla from "./components/ejemplos/Pantalla"
-import { useState, useEffect } from "react"
+// import { useState, useEffect } from "react"
 
 // function App ()
 // {
@@ -57,24 +57,13 @@ import { useState, useEffect } from "react"
 // <CambiarTitulo />
 // <br></br>
 // <Adivina /> */}
+import {ListaAlumnos} from './components/ListaAlumnos'
 function App() {
-  const [nombre, setNombre] = useState("")
-
-  useEffect(() => {
-    if (nombre) {
-      document.title = `Hola ${nombre}`
-    } else {
-      document.title = `Mi app`
-    }
-  }, [nombre])
+  
 
 return (
   <>
-  <input
-  value = {nombre}
-  onChange={(e) => setNombre(e.target.value)}
-  placeholder="Ingresa tu nombre" />
-  <h2>Hola {nombre}</h2>
+ <ListaAlumnos/>
   </>
 )
 }

@@ -64,14 +64,27 @@ import { useState} from 'react'
 function App() 
 {
   const [actualizar, setActualizar] = useState(0) //es un contador
+  const [AlumnoEditar, setAlumnoEditar] = useState(null)
+
     function alumnoCreado(){
       setActualizar (valor => valor + 1)
+      setAlumnoEditar(null)
+    }
+
+    function seleccionarAlumno(alumno){
+      setAlumnoEditar(alumno)
     }
   
 return (
   <main>
- <FormularioA onAlumnoCreado={alumnoCreado}/>
- <ListaAlumnos actualizar={actualizar}/>
+ <FormularioA key={AlumnoEditar?.legajo ?? "nuevo"} //si hizo click en editar y tengo un legajo asociado, voy a ocupar ese legajo y si es null ejecuta uno nuevo
+ onAlumnoCreado={alumnoCreado}
+ alumnoEditar={AlumnoEditar}/>
+ <ListaAlumnos
+  actualizar={actualizar} 
+ onAlumnoCreado={alumnoCreado}
+ onEditarAlumno={seleccionarAlumno} //xq lleva el on es para indicarle q es una función, actualizar es un estado no una función
+ />
   </main>
 )
 }

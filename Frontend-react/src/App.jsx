@@ -74,16 +74,17 @@ function App()
     function seleccionarAlumno(alumno){
       setAlumnoEditar(alumno)
     }
-  
+  //key esta vacio o null empezamos por post y es uno nuevo y si el usuario hizo clic en editar se va a put 
 return (
-  <main>
- <FormularioA key={AlumnoEditar?.legajo ?? "nuevo"} //si hizo click en editar y tengo un legajo asociado, voy a ocupar ese legajo y si es null ejecuta uno nuevo
+  <main> 
+ <FormularioA key={AlumnoEditar?.legajo ?? "nuevo"} //el nuevo no significa nada //si hizo click en editar y tengo un legajo asociado, voy a ocupar ese legajo y si es null ejecuta uno nuevo
  onAlumnoCreado={alumnoCreado}
  alumnoEditar={AlumnoEditar}/>
  <ListaAlumnos
   actualizar={actualizar} 
  onAlumnoCreado={alumnoCreado}
  onEditarAlumno={seleccionarAlumno} //xq lleva el on es para indicarle q es una función, actualizar es un estado no una función
+ onCancelar = {() => setAlumnoEditar (null)} //se pone setAlumnoEditar ya q el resetea todo
  />
   </main>
 )

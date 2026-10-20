@@ -1,12 +1,12 @@
 import { useState } from "react";
 const API_ALUMNOS = "http://localhost:3000/alumnos"
 
-function FormularioA({onAlumnoCreado}) {
+function FormularioA({onAlumnoCreado, alumnoEditar, onCancelar}) { //recibe las funciones
     const [formulario, setFormulario] = useState({
-        legajo: "",
-        nombre: "",
-        carrera: "",
-        correo: ""
+        legajo: String(alumnoEditar?.legajo ?? ""), //si viene como null entonces mostrar en blanco en input y si viene con info se muestra el lejago 100
+        nombre: alumnoEditar?.nombre  ?? "", //si viene con el nombre se muestra en el input sino se muestra vacio 
+        carrera: alumnoEditar?.carrera ?? "",
+        correo: alumnoEditar?.correo ?? ""
     })
     const [error, setError] = useState("")
     const [guardando, setGuardando] = useState(false) //lo vamos a ocupar como un booleano
@@ -24,6 +24,8 @@ function FormularioA({onAlumnoCreado}) {
     // const[correo, setCorreo] = useState("")
     // const [legajo, setLegajo] = useState("")
     // const [carrera, setCarrera] = useState("")
+   
+    
 
     async function guardar(e) {
         e.preventDefault()
@@ -33,18 +35,24 @@ function FormularioA({onAlumnoCreado}) {
         // console.log(correo)
         // console.log(legajo)
         // console.log(carrera)
+         const alumno = {
+        ...formulario,
+        legajo: Number (formulario.legajo)
+    }
+        const editando = Boolean(alumnoEditar) //si viene como null alumnoEditando da falso e iriamos con post, si no put
+    const url = editando 
+                    ?`${API_ALUMNOS}/${alumnoEditar.legajo}`     //si alumnoEditar viene con legajo entonces esto representa nuestra ruta 
+                    :API_ALUMNOS
+
         try{
-            const alumno = {
-                ...formulario,
-                legajo: Number(formulario.legajo) //para q el legajo sea un número
-            }
-            const respuesta  = await fetch(API_ALUMNOS, { //recice la respuesta
-                method: "POST",
+            const respuesta  = await fetch(url, { //recibe la respuesta, si es tru es editar si es false es 
+                method:  editando ? "PUT" : "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(alumno)
-            })
+            }) //si la respuesta del servidor da todo okey no pasa por acá y se vacia el formualario si no si pasa por aca si es q da error
             if (!respuesta.ok) {
                 throw new Error(`No se pudo guardar el alumno. Estado HTTP: ${respuesta.status}`)
+                
             }
             setFormulario({ //se resetea el formulario 
                 legajo: "",
@@ -61,9 +69,14 @@ function FormularioA({onAlumnoCreado}) {
     }
 }
 
+function cancelar() {
+    onCancelar ()
+}
+
 
     return (
         <>
+        <h2>{alumnoEditar ? "Editar Alumno" : "Nuevo Alumno"}</h2>
             <form onSubmit={guardar}>
                 <label htmlFor="legajo">Lejago:</label>
                 <input 
@@ -97,10 +110,22 @@ function FormularioA({onAlumnoCreado}) {
                 onChange={manejarCambio}
                 required
                 />
-
+                
                 <button type="submit" disabled={guardando}>
-                    {guardando ? "Guardando..." : "Guardar"} 
+                    {guardando 
+                    ? "Guardando..." 
+                    : alumnoEditar
+                    ? "Guardar Cambios"
+                    : "Guardar"} 
                 </button>
+                {alumnoEditar && (
+                    <button
+                    type="button"
+                    onClick={cancelar}
+                    disable={guardando}
+                    >Cancelar 
+                    </button>
+                )}
 
                 <br></br>
                 

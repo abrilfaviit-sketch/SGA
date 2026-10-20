@@ -1,7 +1,7 @@
 import { useEffect, useState} from 'react'
 const API_ALUMNOS = "http://localhost:3000/alumnos"
 
-    export function ListaAlumnos (actualizar, onAlumnoCreado){ //el onAlumnoCreado hace q se ejeucte la función y actualiza el valor del estado a 1 más, para q el useState cambie y me muestre los datos de vuelta
+    export function ListaAlumnos (actualizar, onAlumnoCreado, onEditarAlumno){ //el onAlumnoCreado hace q se ejeucte la función y actualiza el valor del estado a 1 más, para q el useState cambie y me muestre los datos de vuelta
     const [alumnos, setAlumnos] = useState([])
     const [cargando, setCargando] = useState(true)
     const [error, setError] = useState("")
@@ -66,6 +66,10 @@ const API_ALUMNOS = "http://localhost:3000/alumnos"
             <li key={alumno.legajo}>
                 {alumnos.legajo} - {alumno.nombre} - {alumno.carrera} 
                 <br />
+                <button type="buttton"
+                onClick={() => onEditarAlumno(alumno)}> {/*alumno representa cada uno de los elementos*/}
+                    Editar
+                </button>
                 <button type="button" 
                 onClick={()=> eliminarAlumno(alumno.legajo)} //función flecha para esperar a q el usuario haga clic para llamar a la función
                 >

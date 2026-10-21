@@ -60,6 +60,7 @@
 import {ListaAlumnos} from './components/ListaAlumnos'
 import FormularioA from './components/FormularioA'
 import { useState} from 'react'
+import EjemploMUI from './components/ejemplos/EjemploMUI.jsx'
 
 function App() 
 {
@@ -86,6 +87,7 @@ return (
  onEditarAlumno={seleccionarAlumno} //xq lleva el on es para indicarle q es una función, actualizar es un estado no una función
  onCancelar = {() => setAlumnoEditar (null)} //se pone setAlumnoEditar ya q el resetea todo
  />
+  <EjemploMUI/>
   </main>
 )
 }
